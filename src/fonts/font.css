@@ -1,0 +1,45 @@
+@font-face {
+  font-family: "Prata";
+  src: url("./Prata-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("./Raleway-VariableFont_wght.ttf");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("./Raleway-Italic-VariableFont_wght.ttf");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./Montserrat-VariableFont_wght.ttf");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./Montserrat-Italic-VariableFont_wght.ttf");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./Roboto-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: url("./Nunito-Italic-VariableFont_wght.ttf");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: url("./Nunito-VariableFont_wght.ttf");
+  font-style: normal;
+}
