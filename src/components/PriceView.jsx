@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import {ethers} from 'ethers';
 
 const ViewPanel = styled.div`
   position: relative;
@@ -29,7 +30,7 @@ const RightText = styled.div`
 const PriceView = (props) => {
   return (
     <ViewPanel>
-      {props.price.toFixed(2)} ETH
+      {props.price && ethers.utils.formatEther(props.price).toString()} ETH
       <RightText>{props.rightText}</RightText>
     </ViewPanel>
   );

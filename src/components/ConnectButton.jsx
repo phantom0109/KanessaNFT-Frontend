@@ -24,7 +24,6 @@ const ConnectButton = () => {
 
     const connectWallet = async () => {
         await onboard.walletSelect();
-        // await onboard.walletCheck()
     }
 
         return (

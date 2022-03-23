@@ -1,6 +1,5 @@
 import Onboard from 'bnc-onboard';
-
-const NETWORK_ID = 1; // mainnet
+import { NETWORK_ID } from '../config/config';
 
 const useOnboard = (subscribers) => {
     const onboard = Onboard({

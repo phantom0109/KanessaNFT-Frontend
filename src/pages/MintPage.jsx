@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import InputNumber from "../components/InputNumber";
 import PriceView from "../components/PriceView";
@@ -8,14 +8,19 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { solid, brands } from "@fortawesome/fontawesome-svg-core/import.macro";
-import Web3Modal from "web3modal";
-import providerOptions from "../utils/WalletConnectProviderOption";
-import { ethers } from "ethers";
 
 import contractAbi from "../abi/KanessaNFT.json";
 import getWhiteListInfo from "../utils/whitelist";
+import { contractAddress } from "../config/config";
+import useContract from "../hook/useContract";
+import useTotalCount from "../hook/useTotalCount";
+import { useEtherBalance, useEthers } from "@usedapp/core";
+import useNFTPrice from "../hook/useNFTPrice";
+import useMintedCount from "../hook/useMintedCount";
+import { useMintNormal, useMintWhitelist } from "../hook/useMint";
+import useWhitelistMode from "../hook/useWhitelistMode";
+import { ethers } from "ethers";
 
-const contractAddress = "0xC84EfB0BFC2b472F6E923612aA566f76a0Ea2A69";
 
 const MintContainer = styled.section`
   width: 100%;
@@ -145,6 +150,7 @@ const RightView = styled.div`
   box-sizing: border-box;
   width: 50%;
   padding: 2%;
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -335,22 +341,25 @@ const SiteLink = styled.a`
 
 const MintPage = () => {
   const [count, setCount] = useState(1);
-  const [price, setPrice] = useState(0);
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [qmessage, setQMessage] = useState("");
-  const [provider, setProvider] = useState(null);
-  const [web3modal, setWeb3modal] = useState(null);
-  const [balance, setBalance] = useState(0);
-  const [contract, setContract] = useState(null);
-  const [totalCount, setTotalCount] = useState(0);
-  const [mintedCount, setMintedCount] = useState(0);
-  const [proof, setProof] = useState("");
-  const [verified, setVerified] = useState(false);
-  const [address, setAddress] = useState("");
+
+  const {account, active} = useEthers();
+  const balance = useEtherBalance(account)
+  const totalCount = useTotalCount();
+  const price = useNFTPrice();
+  const mintedCount = useMintedCount();
+  const whitelistMode = useWhitelistMode();
+
+  const {error: errorForMintNormal,send: mintNormal} = useMintNormal();
+  const {error: errorForMintWhitelist,send: mintWhitelist} = useMintWhitelist();
 
   const addCount = () => {
-    setCount(count + 1);
+    if (count < 5) {
+      setCount(count + 1);
+    }
   };
 
   const reduceCount = () => {
@@ -359,110 +368,53 @@ const MintPage = () => {
     }
   };
 
-  const sendMsg = () => {
+  const sendMsg = (e) => {
+    e.preventDefault();
+    if (!email || !fullName || !qmessage) {
+      toast.warning('Please Input Necessary Fields.');
+      return ;
+    }
     setEmail("");
     setFullName("");
     setQMessage("");
     toast("Successfully sended!");
   };
 
-  const handleWalletConnect = async () => {
-    try {
-      if (provider) {
-        web3modal.clearCachedProvider(provider);
-        setProvider(null);
-        return;
-      }
-
-      const web3Modal = new Web3Modal({
-        network: "mainnet", // optional
-        cacheProvider: true, // optional
-        providerOptions, // required
-      });
-
-      setWeb3modal(web3Modal);
-
-      const newProvider = new ethers.providers.Web3Provider(
-        await web3Modal.connect()
-      );
-
-      setProvider(newProvider);
-
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractAbi.abi,
-        newProvider.getSigner()
-      );
-
-      const address = window.ethereum.selectedAddress;
-      setAddress(address);
-
-      const data = await getWhiteListInfo(address);
-      console.log(address);
-
-      if (data.verified) {
-        setProof(data.proof);
-      }
-      setVerified(data.verified);
-
-      setContract(contract);
-
-      const totalCount = await contract.totalCount();
-      setTotalCount(totalCount.toNumber());
-
-      const mintedCount = await contract.count();
-      setMintedCount(mintedCount.toNumber());
-
-      setBalance(
-        parseFloat(
-          ethers.utils.formatEther(await newProvider.getBalance(address))
-        )
-      );
-
-      setPrice(parseFloat(ethers.utils.formatEther(await contract.price())));
-    } catch (err) {
-      const errStr = JSON.stringify(err);
-      console.log(errStr);
-      toast(err.message);
-    }
-  };
-
   const mintNow = async () => {
     try {
-      if (!provider) {
+      if (!active || !account) {
         toast("Please connect your wallet!");
         return;
       } else if (balance < price * count) {
-        toast("Not enough ether to mint!");
+        toast.error("Not enough ether to mint!");
         return;
       }
 
       let result;
-      if (verified) {
-        result = await contract.payToWhiteMint(address, proof, count, {
-          value: ethers.utils.parseEther(price.toString()).mul(count),
+      if (whitelistMode) {
+        const data = await getWhiteListInfo(account);
+        if (!data.verified) {
+          toast.warn("You are not Whitelist member.");
+          return;
+        }
+        result = await mintWhitelist(account, data.proof, count, {
+          value: price.mul(count),
         });
       } else {
-        result = await contract.payToMint(address, count, {
-          value: ethers.utils.parseEther(price.toString()).mul(count),
+        result = await mintNormal(account, count, {
+          value: price.mul(count),
         });
       }
 
       await result.wait();
 
-      setMintedCount((await contract.count()).toNumber());
-
-      setBalance(
-        parseFloat(ethers.utils.formatEther(await provider.getBalance(address)))
-      );
-
       setCount(1);
-
       toast("Minting successed!");
+
     } catch (err) {
       const errStr = JSON.stringify(err);
       console.log(errStr);
-      toast(err.error.message);
+      toast.error(err.error.message);
     }
   };
 
@@ -478,7 +430,7 @@ const MintPage = () => {
         <LeftForm>
           <FromTitle>Mint your Plus size ladies</FromTitle>
           <CounterStr>
-            {mintedCount} / {totalCount} kanessa Minted
+            {`${mintedCount.toNumber()} / ${totalCount.toNumber()}`} kanessa Minted
           </CounterStr>
           <InputNumber
             count={count}
@@ -488,7 +440,7 @@ const MintPage = () => {
           <PricePanel>
             <PriceView price={price} rightText="Mint Price" />
             <Spliter />
-            <PriceView price={count * price} rightText="Total Price" />
+            <PriceView price={price.mul(count)} rightText="Total Price" />
           </PricePanel>
           <MintBtn onClick={mintNow}>Mint now</MintBtn>
         </LeftForm>
@@ -507,9 +459,11 @@ const MintPage = () => {
             navigation={true}
             style={{ width: "80%", zIndex: "2" }}
           >
-            <SliderItem src="/assets/images/model0.png" />
-            <SliderItem src="/assets/images/model0.png" />
-            <SliderItem src="/assets/images/model0.png" />
+            <SliderItem src="/assets/images/model1.png" />
+            <SliderItem src="/assets/images/model2.png" />
+            <SliderItem src="/assets/images/model3.png" />
+            <SliderItem src="/assets/images/model4.png" />
+            <SliderItem src="/assets/images/model5.png" />
           </Slider>
         </RightView>
       </MintPanel>

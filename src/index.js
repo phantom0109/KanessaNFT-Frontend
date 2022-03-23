@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
+import { Mainnet, DAppProvider, Rinkeby } from '@usedapp/core'
+import { NETWORK_ID, RPC_URL } from './config/config';
 
 const config = {
-  readOnlyChainId: Mainnet.chainId,
+  readOnlyChainId: NETWORK_ID,
   readOnlyUrls: {
-    [Mainnet.chainId]: 'https://mainnet.infura.io/v3/62687d1a985d4508b2b7a24827551934',
+    [NETWORK_ID]: RPC_URL,
   },
 }
 
