@@ -10,6 +10,7 @@
 
 # production
 /build
+/backend/build
 
 # misc
 .DS_Store
@@ -23,7 +24,6 @@ yarn-debug.log*
 yarn-error.log*
 
 node_modules
-.env
 coverage
 coverage.json
 typechain
