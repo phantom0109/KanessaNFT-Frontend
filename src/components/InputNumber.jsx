@@ -26,23 +26,18 @@ const ChangeBtn = styled.a`
   position: absolute;
   font: inherit;
   font-weight: 400;
-  font-size: 27px;
+  font-size: 30px;
   line-height: 37px;
   margin: 0 28.47px;
+  outline: none;
+  border: none;
   top: 20.82px;
   left: ${(props) => (props.left ? "0px;" : "")};
   right: ${(props) => (props.right ? "0px;" : "")};
   border: transparent solid 1px;
   text-decoration: unset;
   color: black;
-  &:hover {
-    border-color: transparent;
-    cursor: pointer;
-    border-color: #a0a0a0;
-  }
-  @media only screen and (max-width: 560px) {
-    font-size: 15px;
-  }
+  cursor: pointer;
 `;
 
 const InputNumber = (props) => {

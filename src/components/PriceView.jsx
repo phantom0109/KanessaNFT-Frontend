@@ -7,7 +7,7 @@ const ViewPanel = styled.div`
   text-align: left;
   font-family: "Nunito";
   font-weight: 800;
-  font-size: 25px;
+  font-size: 22px;
   line-height: 34px;
   color: inherit;
   width: 100%;
@@ -17,8 +17,7 @@ const RightText = styled.div`
   position: absolute;
   font: inherit;
   font-weight: 300;
-  font-size: 20px;
-  line-height: 27.28px;
+  font-size: 18px;
   vertical-align: bottom;
   right: 0px;
   bottom: 0px;
