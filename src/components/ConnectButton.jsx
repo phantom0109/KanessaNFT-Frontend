@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useEtherBalance, useEthers } from '@usedapp/core';
 import { ethers } from 'ethers';
@@ -19,6 +19,12 @@ const ConnectButton = () => {
         }
     }
 
+
+
+    useEffect(() => {
+        connectWallet();
+    }, []);
+
     const onboard = useOnboard(onboardSubscriber);
     const etherBalance = useEtherBalance(account)
 
@@ -29,8 +35,9 @@ const ConnectButton = () => {
         return (
             <>
                 {!account && <Button onClick={(e) => {e.stopPropagation(); connectWallet()}}>Connect</Button>}
+                {account && <Button onClick={(e) => {e.stopPropagation(); deactivate()}} >{displayAddress(account)}</Button>}
 
-                {account && (
+                {/* {account && (
                     <AccountView onClick={(e) => {e.stopPropagation(); deactivate()}}>
                         <img src={ethIcon} />
                         <div>
@@ -42,7 +49,7 @@ const ConnectButton = () => {
                         </div>
                     </AccountView>
                 )
-                }
+                } */}
             </>
         )
     }
@@ -54,15 +61,17 @@ const Button = styled.button`
     align-items: center;
     background: transparent;
     padding: 20px;
-    color: #131218;
+    // color: #131218;
+    color: #323011;
     font-size: 18px;
-    font-family: 'Oswald';
+    font-family: 'Nunito';
     position: relative;
-    border: 1px solid #131218;
+    border: 1px solid #dfb77a;
     border-radius: 16px;
     background-clip: padding-box;
     padding: 10px;
     cursor: pointer;
+    transition: all 0.3s;
     @media(max-width: 991px) {
         padding: 5px;
         width: 100px;
@@ -70,13 +79,13 @@ const Button = styled.button`
         border-radius: 12px;
     }
     &: hover {
-        color: #9f783e
+        background: #9f783e55;
     }
     &:after {
         position: absolute;
         top: -2px; bottom: -2px;
         left: -2px; right: -2px;
-        background: linear-gradient(#6A4EE8, #FF9B63);
+        background: linear-gradient(#dfb77a, #d3922e);
         content: '';
         z-index: -1;
         border-radius: 16px;

@@ -1,29 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import InputNumber from "../components/InputNumber";
 import PriceView from "../components/PriceView";
-import Slider from "react-slideview";
+import Slider from "react-slideview"
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { solid, brands } from "@fortawesome/fontawesome-svg-core/import.macro";
 
-import contractAbi from "../abi/KanessaNFT.json";
 import getWhiteListInfo from "../utils/whitelist";
-import { contractAddress } from "../config/config";
-import useContract from "../hook/useContract";
 import useTotalCount from "../hook/useTotalCount";
 import { useEtherBalance, useEthers } from "@usedapp/core";
 import useNFTPrice from "../hook/useNFTPrice";
 import useMintedCount from "../hook/useMintedCount";
 import { useMintNormal, useMintWhitelist } from "../hook/useMint";
 import useWhitelistMode from "../hook/useWhitelistMode";
-import { ethers } from "ethers";
 
+const sliderSetting = {
+  dots: false,
+  infinite: true,
+  speed: 1200,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+};
 
 const MintContainer = styled.section`
   width: 100%;
+  padding-top: 120px;
   @media only screen and (max-width: 540px) {
     padding-top: 25px;
   }
@@ -135,9 +140,11 @@ const MintBtn = styled.div`
   font-size: 25px;
   margin-top: auto;
   text-align: center;
+  transition: all 0.3s;
   &:hover {
     cursor: pointer;
     color: #9d9d33;
+    background: #000;
   }
   @media only screen and (max-width: 567px) {
     font-size: 20px;
@@ -161,8 +168,8 @@ const RightView = styled.div`
 `;
 
 const SliderItem = styled.img`
-  width: 100%;
   padding: 5% 10%;
+  width: 100%;
   height: auto;
   display: flex;
   justify-content: center;
@@ -179,7 +186,7 @@ const SliderItem = styled.img`
 const QueryFormPanel = styled.div`
   display: flex;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   padding: 5% 10%;
   box-sizing: border-box;
   justify-content: space-around;
@@ -189,19 +196,29 @@ const QueryFormPanel = styled.div`
 `;
 
 const QueryLabel = styled.div`
-  width: 100%;
+  @media(max-width: 567px) {
+    width: 100%;
+  }
+  width: 50%;
 `;
 const QueryLabelTitle = styled.h1`
   margin: 0px;
   font: inherit;
-  font-size: 40px;
+  font-size: 60px;
+  @media(max-width: 991px) {
+    font-size: 50px;
+  }
   @media only screen and (max-width: 567px) {
     font-size: 30px;
   }
 `;
 
 const QueryForm = styled.form`
-  width: 100%;
+  @media(max-width: 567px) {
+    width: 100%;
+  }
+  width: 0;
+  flex: 1;
   font-family: "Raleway";
   font-style: normal;
   font-size: 13px;
@@ -258,7 +275,7 @@ const Ribbon = styled.img`
   left: ${(props) => (props.left ? props.left : "")};
   right: ${(props) => (props.right ? props.right : "")};
   bottom: ${(props) => (props.bottom ? props.bottom : "")};
-  z-index: 2;
+  z-index: 0;
   @media only screen and (max-width: 567px) {
     display: ${(props) => (props.minihidden ? "none" : "block")};
     transform: scale(0.8);
@@ -353,8 +370,30 @@ const MintPage = () => {
   const mintedCount = useMintedCount();
   const whitelistMode = useWhitelistMode();
 
-  const {error: errorForMintNormal,send: mintNormal} = useMintNormal();
-  const {error: errorForMintWhitelist,send: mintWhitelist} = useMintWhitelist();
+  const imgs = [
+    "/assets/images/model0.png",
+    "/assets/images/model1.png",
+    "/assets/images/model2.png",
+    "/assets/images/model3.png",
+    "/assets/images/model4.png",
+  ];
+
+  const {state: stateForMintNormal,send: mintNormal} = useMintNormal();
+  const {state: stateForMintWhitelist,send: mintWhitelist} = useMintWhitelist();
+
+  useEffect(() => {
+    if (stateForMintNormal) {
+      stateForMintNormal.status === 'Exception' && toast.error(stateForMintNormal.errorMessage);
+      stateForMintNormal.status === 'Success' && toast.success('Mint success!');
+    }
+    if (stateForMintWhitelist) {
+      stateForMintWhitelist.status === 'Exception' && toast.error(stateForMintWhitelist.errorMessage);
+      stateForMintWhitelist.status === 'Success' && toast.success('Mint success!');
+    }
+
+    console.log('status: ', stateForMintNormal, stateForMintWhitelist)
+
+  }, [stateForMintNormal, stateForMintWhitelist])
 
   const addCount = () => {
     if (count < 5) {
@@ -406,15 +445,10 @@ const MintPage = () => {
         });
       }
 
-      await result.wait();
-
       setCount(1);
-      toast("Minting successed!");
-
     } catch (err) {
       const errStr = JSON.stringify(err);
       console.log(errStr);
-      toast.error(err.error.message);
     }
   };
 
@@ -456,14 +490,15 @@ const MintPage = () => {
           <Ribbon src="/assets/images/RB.png" right="-18px" bottom="-27px" />
           <Ribbon src="/assets/images/Circle.png"/>
           <Slider
-            navigation={true}
-            style={{ width: "80%", zIndex: "2" }}
+            // {...sliderSetting}
+            className="slider-card"
           >
-            <SliderItem src="/assets/images/model1.png" />
-            <SliderItem src="/assets/images/model2.png" />
-            <SliderItem src="/assets/images/model3.png" />
-            <SliderItem src="/assets/images/model4.png" />
-            <SliderItem src="/assets/images/model5.png" />
+            {
+              imgs.map((img, index) => (
+                <SliderItem key={index} className="slider-item" src={img} />
+              ))
+            }
+            
           </Slider>
         </RightView>
       </MintPanel>
