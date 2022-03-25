@@ -30,7 +30,7 @@ const MintContainer = styled.section`
   width: 100%;
   padding-top: 120px;
   @media only screen and (max-width: 540px) {
-    padding-top: 25px;
+    padding-top: 40px;
   }
   display: flex;
   flex-direction: column;
@@ -50,7 +50,7 @@ const Footer = styled.section`
 
 const MintPanel = styled.div`
   display: flex;
-  max-width: 900px;
+  max-width: 1000px;
   height: calc(100vh - 154px);
   flex-wrap: wrap;
   position: relative;
@@ -156,7 +156,7 @@ const RightView = styled.div`
   background: #fffcf8;
   box-sizing: border-box;
   width: 50%;
-  padding: 2%;
+  padding: 0 5%;
   min-height: 400px;
   display: flex;
   align-items: center;
@@ -164,6 +164,7 @@ const RightView = styled.div`
   border-radius: 20px;
   @media(max-width: 991px) {
     width: 100%;
+    padding: 2%;
   }
 `;
 
@@ -490,7 +491,6 @@ const MintPage = () => {
           <Ribbon src="/assets/images/RB.png" right="-18px" bottom="-27px" />
           <Ribbon src="/assets/images/Circle.png"/>
           <Slider
-            // {...sliderSetting}
             className="slider-card"
           >
             {

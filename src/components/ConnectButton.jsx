@@ -72,9 +72,11 @@ const Button = styled.button`
     padding: 10px;
     cursor: pointer;
     transition: all 0.3s;
+    @media(max-width: 567px) {
+        flex: 1;
+    }
     @media(max-width: 991px) {
-        padding: 5px;
-        width: 100px;
+        width: fit-content;
         font-size: 16px;
         border-radius: 12px;
     }
