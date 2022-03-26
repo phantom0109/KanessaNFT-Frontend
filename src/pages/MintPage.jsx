@@ -118,7 +118,7 @@ const PricePanel = styled.div`
   border-radius: 6px;
   padding: 20.11px 24.31px;
   width: 100%;
-  margin-top: 22.99px;
+  margin: 22.99px 0;
   border: #131218 solid 0.5px;
   border-radius: 4px;
   box-sizing: border-box;
