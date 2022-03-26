@@ -12,7 +12,7 @@ const useNFTPrice = () => {
         args: []
     }) || {value: [BigNumber.from(0)]};
 
-    return value[0];
+    return value ? value[0] : BigNumber.from(0);
 }
 
 export default useNFTPrice;

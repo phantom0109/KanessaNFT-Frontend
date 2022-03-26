@@ -11,7 +11,7 @@ const useWhitelistMode = () => {
         args: []
     }) || {value: [true]};
 
-    return value[0];
+    return value ? value[0] : true;
 }
 
 export default useWhitelistMode;
