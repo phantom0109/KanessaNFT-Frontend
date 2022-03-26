@@ -51,7 +51,7 @@ const Footer = styled.section`
 const MintPanel = styled.div`
   display: flex;
   max-width: 1000px;
-  height: calc(100vh - 154px);
+  min-height: calc(100vh - 154px);
   flex-wrap: wrap;
   position: relative;
   background: rgba(255, 252, 247, 0.2);
