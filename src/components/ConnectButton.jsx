@@ -7,7 +7,7 @@ import { displayAddress } from '../utils/helpers';
 import ethIcon from '../assets/eth.png';
 
 const ConnectButton = () => {
-    const { account, deactivate, activate } = useEthers();
+    const { account, deactivate, activate, activateBrowserWallet } = useEthers();
 
     const onboardSubscriber = {
         wallet: async (wallet) => {
@@ -19,14 +19,7 @@ const ConnectButton = () => {
         }
     }
 
-
-
-    useEffect(() => {
-        connectWallet();
-    }, []);
-
     const onboard = useOnboard(onboardSubscriber);
-    const etherBalance = useEtherBalance(account)
 
     const connectWallet = async () => {
         await onboard.walletSelect();

@@ -61,6 +61,7 @@ const MintPanel = styled.div`
   color: #131218;
   border-width: 0;
   margin-bottom: 40px;
+  box-shadow: 1px 1px 11px 1px #d5993b;
   @media only screen and (max-width: 991px) {
     flex-direction: column-reverse;
     max-width: 365px;
@@ -423,7 +424,7 @@ const MintPage = () => {
   const mintNow = async () => {
     try {
       if (!active || !account) {
-        toast("Please connect your wallet!");
+        toast.warning("Please connect your wallet!");
         return;
       } else if (balance < price * count) {
         toast.error("Not enough ether to mint!");
@@ -434,7 +435,7 @@ const MintPage = () => {
       if (whitelistMode) {
         const data = await getWhiteListInfo(account);
         if (!data.verified) {
-          toast.warn("You are not Whitelist member.");
+          toast.warning("You are not Whitelist member.");
           return;
         }
         result = await mintWhitelist(account, data.proof, count, {
@@ -563,7 +564,7 @@ const MintPage = () => {
           </SiteLink>
         </SiteLinks>
       </Footer>
-      <ToastContainer />
+      <ToastContainer toastClassName={'custom-toast-container'}/>
     </MintContainer>
   );
 };

@@ -6,5 +6,6 @@ export const contractAddress = "0xC84EfB0BFC2b472F6E923612aA566f76a0Ea2A69";
 
 export const NETWORK_ID = DEBUG ? 4 : 1;
 export const RPC_URL = NETWORK_ID == 4 ? TESTNET_RPC_URL : MAINNET_RPC_URL;
+export const NETWORK_NAME = DEBUG ? 'RinkeBy' : 'Mainnet'
 
 export const OPENSEA_LINK = 'https://testnets.opensea.io/collection/kanessanft-plus-size-lady';
