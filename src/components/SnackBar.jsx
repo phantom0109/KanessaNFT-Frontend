@@ -79,6 +79,7 @@ const Wrapper = styled.div`
 
 const Button = styled.span`
     text-decoration: underline;
+    cursor: pointer;
 `
 
 const Img = styled.img`

@@ -530,10 +530,10 @@ const MintPage = () => {
           </QueryForm>
         </QueryFormPanel>
         <FooterMarkPanel>
-          <a href="https://demo.templately.com/press24-home/">
+          <a href="https://www.kanessa.io/" target="_blank">
             <img
-              src="/assets/images/kanessa_nft_png.png"
-              style={{ display: "block", margin: "auto" }}
+              src="/assets/images/logo.png"
+              style={{ display: "block", margin: "auto", width: '40%', minWidth: '200px' }}
             />
           </a>
         </FooterMarkPanel>
