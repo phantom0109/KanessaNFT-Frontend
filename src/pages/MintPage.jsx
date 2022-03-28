@@ -4,26 +4,151 @@ import InputNumber from "../components/InputNumber";
 import PriceView from "../components/PriceView";
 import Slider from "react-slideview"
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { solid, brands } from "@fortawesome/fontawesome-svg-core/import.macro";
-
-import getWhiteListInfo from "../utils/whitelist";
+import {getWhiteListInfo} from "../utils/whitelist";
 import useTotalCount from "../hook/useTotalCount";
 import { useEtherBalance, useEthers } from "@usedapp/core";
 import useNFTPrice from "../hook/useNFTPrice";
 import useMintedCount from "../hook/useMintedCount";
 import { useMintNormal, useMintWhitelist } from "../hook/useMint";
 import useWhitelistMode from "../hook/useWhitelistMode";
+import ViewInfoPanel from "../components/ViewInfoPanel";
+import AnimatedNumberView from "../components/AnimatedNumberView";
 
-const sliderSetting = {
-  dots: false,
-  infinite: true,
-  speed: 1200,
-  slidesToShow: 3,
-  slidesToScroll: 1,
+const MintPage = () => {
+  const [count, setCount] = useState(1);
+  const {account, active} = useEthers();
+  const balance = useEtherBalance(account)
+  const totalCount = useTotalCount();
+  const price = useNFTPrice();
+  const mintedCount = useMintedCount();
+  const whitelistMode = useWhitelistMode();
+
+  const imgs = [
+    "/assets/images/model0.png",
+    "/assets/images/model1.png",
+    "/assets/images/model2.png",
+    "/assets/images/model3.png",
+    "/assets/images/model4.png",
+  ];
+
+  const {state: stateForMintNormal,send: mintNormal} = useMintNormal();
+  const {state: stateForMintWhitelist,send: mintWhitelist} = useMintWhitelist();
+
+  useEffect(() => {
+    if (stateForMintNormal) {
+      stateForMintNormal.status === 'Exception' && toast.error(stateForMintNormal.errorMessage);
+      stateForMintNormal.status === 'Success' && toast.success('Mint success!');
+    }
+    if (stateForMintWhitelist) {
+      stateForMintWhitelist.status === 'Exception' && toast.error(stateForMintWhitelist.errorMessage);
+      stateForMintWhitelist.status === 'Success' && toast.success('Mint success!');
+    }
+
+    console.log('status: ', stateForMintNormal, stateForMintWhitelist)
+
+  }, [stateForMintNormal, stateForMintWhitelist]);
+
+  const addCount = () => {
+    if (count < 5) {
+      setCount(count + 1);
+    }
+  };
+
+  const reduceCount = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const mintNow = async () => {
+    try {
+      if (!active || !account) {
+        toast.warning("Please connect your wallet!");
+        return;
+      } else if (balance < price * count) {
+        toast.error("Not enough ETH to mint!");
+        return;
+      }
+
+      let result;
+      if (whitelistMode) {
+        const data = await getWhiteListInfo(account);
+        if (!data.verified) {
+          toast.warning("You are not Whitelist member.");
+          return;
+        }
+        result = await mintWhitelist(account, data.proof, count, {
+          value: price.mul(count),
+        });
+      } else {
+        result = await mintNormal(account, count, {
+          value: price.mul(count),
+        });
+      }
+
+      setCount(1);
+    } catch (err) {
+      const errStr = JSON.stringify(err);
+      console.log(errStr);
+    }
+  };
+
+  return (
+    <MintContainer>
+      <ViewInfoPanel />
+      <MintPanel>
+        <Ribbon
+          src="/assets/images/LTDots.png"
+          top="-10%"
+          left="-53px"
+          minihidden
+        />
+        <LeftForm>
+          <FromTitle>Mint your Plus size ladies</FromTitle>
+          <CounterStr>
+            <AnimatedNumberView value={mintedCount.toNumber()} fontFamily={'inherit'} fontSize={'inherit'} fontColor={'inherit'} fontWeight={'inherit'}/>
+            {` / ${totalCount.toNumber()}`} NFTs Minted
+          </CounterStr>
+          <InputNumber
+            count={count}
+            addCount={addCount}
+            reduceCount={reduceCount}
+          />
+          <PricePanel>
+            <PriceView price={price} rightText="Mint Price" />
+            <Spliter />
+            <PriceView price={price.mul(count)} rightText="Total Price" />
+          </PricePanel>
+          <MintBtn onClick={mintNow}>Mint now</MintBtn>
+        </LeftForm>
+        <RightView>
+          <Ribbon
+            src="/assets/images/RTGrid.png"
+            top="-35px"
+            right="-35px"
+            minihidden
+          />
+          <Ribbon src="/assets/images/LTRibbon.png" left="40px" top="-45px" />
+          <Ribbon src="/assets/images/Dot.png" left="-26px" bottom="168px" />
+          <Ribbon src="/assets/images/RB.png" right="-18px" bottom="-27px" />
+          <Ribbon src="/assets/images/Circle.png"/>
+          <Slider
+            className="slider-card"
+          >
+            {
+              imgs.map((img, index) => (
+                <SliderItem key={index} className="slider-item" src={img} />
+              ))
+            }
+            
+          </Slider>
+        </RightView>
+      </MintPanel>
+    </MintContainer>
+  );
 };
 
 const MintContainer = styled.section`
@@ -37,16 +162,6 @@ const MintContainer = styled.section`
   align-items: center;
 `;
 
-const Footer = styled.section`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: "Prata";
-  font-style: normal;
-  font-weight: 400;
-  background: #f1e4cb;
-`;
 
 const MintPanel = styled.div`
   display: flex;
@@ -99,6 +214,8 @@ const FromTitle = styled.h1`
   font: inherit;
   font-size: 40px;
   font-weight: 700;
+  color: var(--text-color);
+  text-align: center;
   @media only screen and (max-width: 991px) {
     font-size: 30px;
   }
@@ -109,6 +226,7 @@ const CounterStr = styled.p`
   line-height: 34px;
   color: #131218;
   margin: 0;
+  text-align: center;
   @media only screen and (max-width: 991px) {
     font-size: 15px;
   }
@@ -185,92 +303,6 @@ const SliderItem = styled.img`
   }
 `;
 
-const QueryFormPanel = styled.div`
-  display: flex;
-  width: 100%;
-  max-width: 1200px;
-  padding: 5% 10%;
-  box-sizing: border-box;
-  justify-content: space-around;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 20px;
-`;
-
-const QueryLabel = styled.div`
-  @media(max-width: 567px) {
-    width: 100%;
-  }
-  width: 50%;
-`;
-const QueryLabelTitle = styled.h1`
-  margin: 0px;
-  font: inherit;
-  font-size: 60px;
-  @media(max-width: 991px) {
-    font-size: 50px;
-  }
-  @media only screen and (max-width: 567px) {
-    font-size: 30px;
-  }
-`;
-
-const QueryForm = styled.form`
-  @media(max-width: 567px) {
-    width: 100%;
-  }
-  width: 0;
-  flex: 1;
-  font-family: "Raleway";
-  font-style: normal;
-  font-size: 13px;
-  font-stretch: 100%;
-  text-align: center;
-`;
-
-const QueryInput = styled.input`
-  width: calc(50% - 2px);
-  float: ${(props) => props.float};
-  background: white;
-  outline-width: 0;
-  box-sizing: border-box;
-  padding: 10px;
-  border: 0px;
-  @media only screen and (max-width: 567px) {
-    width: 100%;
-    margin-top: 4px;
-  }
-`;
-
-const QueryText = styled.textarea`
-  width: 100%;
-  margin-top: 4px;
-  background: white;
-  box-sizing: border-box;
-  padding: 10px;
-  height: 150px;
-  border: 0px;
-  outline-width: 0;
-`;
-
-const SendMsgBtn = styled.button`
-  font-family: "Roboto";
-  font-style: normal;
-  font-size: 13px;
-  font-weight: 400;
-  background: #ff5130;
-  text-transform: uppercase;
-  padding: 12px 20px;
-  border: 0px;
-  margin-top: 10px;
-  outline-width: 0;
-  color: white;
-  @media only screen and (max-width: 567px) {
-    width: 100%;
-    margin-top: 4px;
-  }
-`;
-
 const Ribbon = styled.img`
   position: absolute;
   top: ${(props) => (props.top ? props.top : "")};
@@ -283,290 +315,5 @@ const Ribbon = styled.img`
     transform: scale(0.8);
   }
 `;
-
-const FooterMarkPanel = styled.div`
-  width: 100%;
-  background-color: #131218;
-  padding: 20px 0px;
-  border-bottom: #262626 solid 1px;
-  @media only screen and (max-width: 567px) {
-    img {
-      width: 50%;
-    }
-  }
-`;
-
-const FooterLinksPanel = styled.div`
-  width: 100%;
-  background-color: #131218;
-  padding: 20px 0;
-  display: flex;
-  justify-content: center;
-  @media(max-width: 567px) {
-    padding: 10px 0;
-  }
-  border-bottom: #262626 solid 1px;
-`;
-
-const FooterLinks = styled.div`
-  font-family: "Montserrat";
-  font-weight: 500;
-  font-size: 16px;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 500px;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  
-  @media(max-width: 567px) {
-    font-size: 14px;
-  }
-`;
-
-const FooterLink = styled.a`
-  color: white;
-  text-decoration: unset;
-  &:hover {
-    color: #dfb77a;
-  }
-`;
-
-const SiteLinks = styled.div`
-  background: #dfb77a;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const SiteLink = styled.a`
-  text-decoration: unset;
-  width: 32px;
-  height: 30px;
-  text-align: center;
-  background: transparent;
-  border-radius: 50%;
-  font-size: 18px;
-  margin: 10px;
-  color: white;
-  padding-top: 5px;
-  &:hover {
-    background: white;
-    color: black;
-  }
-`;
-
-const MintPage = () => {
-  const [count, setCount] = useState(1);
-
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [qmessage, setQMessage] = useState("");
-
-  const {account, active} = useEthers();
-  const balance = useEtherBalance(account)
-  const totalCount = useTotalCount();
-  const price = useNFTPrice();
-  const mintedCount = useMintedCount();
-  const whitelistMode = useWhitelistMode();
-
-  const imgs = [
-    "/assets/images/model0.png",
-    "/assets/images/model1.png",
-    "/assets/images/model2.png",
-    "/assets/images/model3.png",
-    "/assets/images/model4.png",
-  ];
-
-  const {state: stateForMintNormal,send: mintNormal} = useMintNormal();
-  const {state: stateForMintWhitelist,send: mintWhitelist} = useMintWhitelist();
-
-  useEffect(() => {
-    if (stateForMintNormal) {
-      stateForMintNormal.status === 'Exception' && toast.error(stateForMintNormal.errorMessage);
-      stateForMintNormal.status === 'Success' && toast.success('Mint success!');
-    }
-    if (stateForMintWhitelist) {
-      stateForMintWhitelist.status === 'Exception' && toast.error(stateForMintWhitelist.errorMessage);
-      stateForMintWhitelist.status === 'Success' && toast.success('Mint success!');
-    }
-
-    console.log('status: ', stateForMintNormal, stateForMintWhitelist)
-
-  }, [stateForMintNormal, stateForMintWhitelist])
-
-  const addCount = () => {
-    if (count < 5) {
-      setCount(count + 1);
-    }
-  };
-
-  const reduceCount = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    }
-  };
-
-  const sendMsg = (e) => {
-    e.preventDefault();
-    if (!email || !fullName || !qmessage) {
-      toast.warning('Please Input Necessary Fields.');
-      return ;
-    }
-    setEmail("");
-    setFullName("");
-    setQMessage("");
-    toast("Successfully sended!");
-  };
-
-  const mintNow = async () => {
-    try {
-      if (!active || !account) {
-        toast.warning("Please connect your wallet!");
-        return;
-      } else if (balance < price * count) {
-        toast.error("Not enough ether to mint!");
-        return;
-      }
-
-      let result;
-      if (whitelistMode) {
-        const data = await getWhiteListInfo(account);
-        if (!data.verified) {
-          toast.warning("You are not Whitelist member.");
-          return;
-        }
-        result = await mintWhitelist(account, data.proof, count, {
-          value: price.mul(count),
-        });
-      } else {
-        result = await mintNormal(account, count, {
-          value: price.mul(count),
-        });
-      }
-
-      setCount(1);
-    } catch (err) {
-      const errStr = JSON.stringify(err);
-      console.log(errStr);
-    }
-  };
-
-  return (
-    <MintContainer>
-      <MintPanel>
-        <Ribbon
-          src="/assets/images/LTDots.png"
-          top="-10%"
-          left="-53px"
-          minihidden
-        />
-        <LeftForm>
-          <FromTitle>Mint your Plus size ladies</FromTitle>
-          <CounterStr>
-            {`${mintedCount.toNumber()} / ${totalCount.toNumber()}`} kanessa Minted
-          </CounterStr>
-          <InputNumber
-            count={count}
-            addCount={addCount}
-            reduceCount={reduceCount}
-          />
-          <PricePanel>
-            <PriceView price={price} rightText="Mint Price" />
-            <Spliter />
-            <PriceView price={price.mul(count)} rightText="Total Price" />
-          </PricePanel>
-          <MintBtn onClick={mintNow}>Mint now</MintBtn>
-        </LeftForm>
-        <RightView>
-          <Ribbon
-            src="/assets/images/RTGrid.png"
-            top="-35px"
-            right="-35px"
-            minihidden
-          />
-          <Ribbon src="/assets/images/LTRibbon.png" left="40px" top="-45px" />
-          <Ribbon src="/assets/images/Dot.png" left="-26px" bottom="168px" />
-          <Ribbon src="/assets/images/RB.png" right="-18px" bottom="-27px" />
-          <Ribbon src="/assets/images/Circle.png"/>
-          <Slider
-            className="slider-card"
-          >
-            {
-              imgs.map((img, index) => (
-                <SliderItem key={index} className="slider-item" src={img} />
-              ))
-            }
-            
-          </Slider>
-        </RightView>
-      </MintPanel>
-      <Footer>
-        <QueryFormPanel>
-          <QueryLabel>
-            <QueryLabelTitle>Have Any Queries?</QueryLabelTitle>
-          </QueryLabel>
-          <QueryForm>
-            <QueryInput
-              placeholder="Full name"
-              value={fullName}
-              float="left"
-              onChange={(e) => setFullName(e.target.value)}
-            />
-            <QueryInput
-              placeholder="E-Mail address"
-              value={email}
-              float="right"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <QueryText
-              placeholder="Write a message"
-              value={qmessage}
-              onChange={(e) => setQMessage(e.target.value)}
-            />
-            <SendMsgBtn onClick={sendMsg}>send message</SendMsgBtn>
-          </QueryForm>
-        </QueryFormPanel>
-        <FooterMarkPanel>
-          <a href="https://www.kanessa.io/" target="_blank">
-            <img
-              src="/assets/images/logo.png"
-              style={{ display: "block", margin: "auto", width: '40%', minWidth: '200px' }}
-            />
-          </a>
-        </FooterMarkPanel>
-        <FooterLinksPanel>
-          <FooterLinks>
-            <FooterLink href="https://www.kanessa.io/homepage">HOME</FooterLink>
-            <FooterLink href="https://opensea.io/KanessaBrand">
-              OPENSEA
-            </FooterLink>
-            <FooterLink href="https://www.kanessa.io/homepage/about">
-              ABOUT US
-            </FooterLink>
-            <FooterLink href="http://www.kanessa.net/">WEBSHOP</FooterLink>
-          </FooterLinks>
-        </FooterLinksPanel>
-        <SiteLinks>
-          <SiteLink href="https://www.facebook.com/kanessanft-102224302360656">
-            <FontAwesomeIcon icon={brands("facebook-f")} />
-          </SiteLink>
-          <SiteLink href="https://www.instagram.com/kanessa.nft/">
-            <FontAwesomeIcon icon={brands("instagram")} />
-          </SiteLink>
-          <SiteLink href="https://opensea.io/KanessaBrand">
-            <FontAwesomeIcon icon={solid("globe")} />
-          </SiteLink>
-          <SiteLink href="https://discord.gg/Ruuwe5Bvhh">
-            <FontAwesomeIcon icon={brands("discord")} />
-          </SiteLink>
-        </SiteLinks>
-      </Footer>
-      <ToastContainer toastClassName={'custom-toast-container'}/>
-    </MintContainer>
-  );
-};
 
 export default MintPage;

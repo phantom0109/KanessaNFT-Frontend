@@ -20,7 +20,9 @@ code {
   background: brown;
 }
 
-/* :root {
-  --toastify-color-light: #c59854 !important;
+:root {
+  /* --toastify-color-light: #c59854 !important;
   --toastify-text-color-light: white !important; */
-/* } */
+  /* --text-color: #623506; */
+  --text-color: #000;
+ }

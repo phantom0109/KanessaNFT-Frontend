@@ -1,0 +1,103 @@
+.timer-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.countdown-wrapper {
+    --text-color: white;
+    --color-secondary: #7c4f168c;
+    max-width: 550px;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    filter: drop-shadow(2px 4px 6px var(--color-secondary));
+    align-items: center;
+    flex-direction: column;
+    --text-color: white;
+    background: var(--color-secondary);
+    border-radius: 8px;
+    gap: 30px;;
+    padding: 20px;
+    @media(max-width: 767px) {
+        padding: 10px;
+        margin-top: 15px;
+    }
+    .countdown-title {
+        margin-bottom: 0;
+        font-size: 24px;
+        color: white;
+        display: flex;
+        width: 80%;
+        text-align: center;
+        justify-content: center;
+    }
+    .btn-buy {
+        width: fit-content;
+        padding: 10px 20px;
+        color: var(--color-secondary);
+        border-radius: 12px;
+        height: 40px;
+        background: white;
+        cursor: pointer;
+        border: none;
+        span {
+            display: block;
+            margin-right: 10px;
+        }
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        transition: all 0.3s;
+        &:hover {
+            background: #5d9de9;
+            color: white;
+        }
+    }
+    .pancakelink {
+        color: var(--text-color);
+        font-size: 18px;
+        cursor: pointer;
+        &:hover {
+            color: rgb(168, 160, 41)
+        }
+    }
+}
+
+.time-wrapper {
+    display: flex;
+    gap: 1.5vw;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-color);
+    .time-letter-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .time-value {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            padding: 10px;
+            @media(max-width: 567px) {
+                font-size: 22px;
+            }
+        }
+        .time-label {
+            font-size: 16px;
+            @media(max-width: 567px) {
+                font-size: 11px;
+            }
+        }
+    }
+    .time-divider {
+        color: var(--text-color);
+        font-size: 32px;
+        margin-bottom: 28px;
+        @media(max-width: 567px) {
+            font-size: 22px;
+            margin-bottom: 23px;
+        }
+    }
+}

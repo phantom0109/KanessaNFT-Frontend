@@ -1,6 +1,6 @@
 import axios from "./axios";
 
-const getWhiteListInfo = async (address) => {
+export const getWhiteListInfo = async (address) => {
   try {
     let response = await axios.get(`/whitelist/${address}`);
     return response.data;
@@ -10,4 +10,13 @@ const getWhiteListInfo = async (address) => {
   }
 };
 
-export default getWhiteListInfo;
+export const getWhitelistCount = async () => {
+  try {
+    let response = await axios.get('/whitelist-count');
+    return response.data.count;
+  } catch (error) {
+    console.log('whitelist-count: ', error);
+    return 0;
+  }
+}
+

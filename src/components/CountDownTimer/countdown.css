@@ -1,0 +1,171 @@
+.timer-section {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.countdown-wrapper {
+  --text-color: white;
+  --color-secondary: #7c4f168c;
+  max-width: 550px;
+  min-width: 300px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-filter: drop-shadow(2px 4px 6px var(--color-secondary));
+          filter: drop-shadow(2px 4px 6px var(--color-secondary));
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  --text-color: white;
+  background: var(--color-secondary);
+  border-radius: 8px;
+  gap: 30px;
+  padding: 20px;
+}
+
+@media (max-width: 767px) {
+  .countdown-wrapper {
+    padding: 10px;
+    margin-top: 15px;
+  }
+}
+
+.countdown-wrapper .countdown-title {
+  margin-bottom: 0;
+  font-size: 24px;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 80%;
+  text-align: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.countdown-wrapper .btn-buy {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px 20px;
+  color: var(--color-secondary);
+  border-radius: 12px;
+  height: 40px;
+  background: white;
+  cursor: pointer;
+  border: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.countdown-wrapper .btn-buy span {
+  display: block;
+  margin-right: 10px;
+}
+
+.countdown-wrapper .btn-buy:hover {
+  background: #5d9de9;
+  color: white;
+}
+
+.countdown-wrapper .pancakelink {
+  color: var(--text-color);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.countdown-wrapper .pancakelink:hover {
+  color: #a8a029;
+}
+
+.time-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1.5vw;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: var(--text-color);
+}
+
+.time-wrapper .time-letter-layout {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.time-wrapper .time-letter-layout .time-value {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 32px;
+  padding: 10px;
+}
+
+@media (max-width: 567px) {
+  .time-wrapper .time-letter-layout .time-value {
+    font-size: 22px;
+  }
+}
+
+.time-wrapper .time-letter-layout .time-label {
+  font-size: 16px;
+}
+
+@media (max-width: 567px) {
+  .time-wrapper .time-letter-layout .time-label {
+    font-size: 11px;
+  }
+}
+
+.time-wrapper .time-divider {
+  color: var(--text-color);
+  font-size: 32px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 567px) {
+  .time-wrapper .time-divider {
+    font-size: 22px;
+    margin-bottom: 23px;
+  }
+}
+/*# sourceMappingURL=countdown.css.map */

@@ -3,6 +3,8 @@ const {
   getWhitelistRoot,
 } = require("../services/merkleTree.service");
 
+const whitelistMembers = require('../whitelist/whitelist').whitelist.array;
+
 exports.getWhitelist = (req, res) => {
   const address = req.params.address;
   const whitelist = verifyWhitelist(address);
@@ -11,6 +13,13 @@ exports.getWhitelist = (req, res) => {
     success: true,
   });
 };
+
+exports.getWhitelistCount = (req, res) => {
+  res.status(200).send({
+    count: whitelistMembers.length,
+    success: true,
+  });
+}
 
 exports.getWhitelistRoot = (req, res) => {
   const root = getWhitelistRoot();

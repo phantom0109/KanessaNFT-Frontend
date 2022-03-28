@@ -5,6 +5,8 @@ import { ethers } from 'ethers';
 import useOnboard from '../hook/useOnboard';
 import { displayAddress } from '../utils/helpers';
 import ethIcon from '../assets/eth.png';
+import { toast } from 'react-toastify';
+import {getWhiteListInfo} from '../utils/whitelist';
 
 const ConnectButton = () => {
     const { account, deactivate, activate, activateBrowserWallet } = useEthers();
@@ -19,6 +21,18 @@ const ConnectButton = () => {
         }
     }
 
+    useEffect(() => {
+        const getWhitelist = async () => {
+            if (account) {
+                const data = await getWhiteListInfo(account);
+                if (data.verified) {
+                    toast.info("You are Whitelist member.");
+                }
+            }
+        }
+        getWhitelist();
+    }, [account]);
+
     const onboard = useOnboard(onboardSubscriber);
 
     const connectWallet = async () => {
@@ -29,20 +43,6 @@ const ConnectButton = () => {
             <>
                 {!account && <Button onClick={(e) => {e.stopPropagation(); connectWallet()}}>Connect</Button>}
                 {account && <Button onClick={(e) => {e.stopPropagation(); deactivate()}} >{displayAddress(account)}</Button>}
-
-                {/* {account && (
-                    <AccountView onClick={(e) => {e.stopPropagation(); deactivate()}}>
-                        <img src={ethIcon} />
-                        <div>
-                            {
-                                etherBalance &&
-                                <span className="balance">{parseFloat(ethers.utils.formatEther(etherBalance)).toFixed(2)} ETH</span>
-                            }
-                            <span className="account">{displayAddress(account)}</span>
-                        </div>
-                    </AccountView>
-                )
-                } */}
             </>
         )
     }

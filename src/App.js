@@ -1,21 +1,14 @@
 import MintPage from "./pages/MintPage";
 import "./fonts/font.css";
-import Header from "./components/Header";
 import styled from "styled-components";
-import SnackBar from "./components/SnackBar";
+import AppLayout from "./layouts/AppLayout";
 
 function App() {
   return (
-    <Wrapper>
-      <Header />
+    <AppLayout>
       <MintPage />
-      <SnackBar />
-    </Wrapper>
+    </AppLayout>
   );
 }
 
-const Wrapper = styled.div`
-  background: #dfb77a;
-  width: 100%;
-`
 export default App;
