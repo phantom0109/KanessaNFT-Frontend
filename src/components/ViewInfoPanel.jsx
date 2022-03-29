@@ -15,10 +15,10 @@ const ViewInfoPanel = () => {
                 <AnimatedNumberView value={whitelistCount} fontFamily={'Nunito'} fontSize={'30px'} fontColor={'#623506'} fontWeight={'inherit'}/>
                 <Span className="divider">/</Span>    
                 <Span className="whitelist-limit">{WHITELIST_LIMIT}</Span>
-                <Span>wallets are whitelisted</Span>
+                <Span>whitelisted</Span>
             </CounterView>            
             {/* <CountDownTimer /> */}
-            <Span className="alert">Presale is not live</Span>
+            <Span className="alert">Mint date to be announced</Span>
             <img src="/assets/images/xmark.png" onClick={() => setVisible(false)}/>
         </Wrapper>
     );

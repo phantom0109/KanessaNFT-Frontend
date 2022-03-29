@@ -8,7 +8,7 @@ export const NETWORK_ID = DEBUG ? 4 : 1;
 export const RPC_URL = NETWORK_ID == 4 ? TESTNET_RPC_URL : MAINNET_RPC_URL;
 export const NETWORK_NAME = DEBUG ? 'RinkeBy' : 'Mainnet'
 
-export const OPENSEA_LINK = 'https://testnets.opensea.io/collection/kanessanft-plus-size-lady';
+export const OPENSEA_LINK = 'https://opensea.io/KanessaBrand';
 export const WHITELIST_LIMIT = 300;
 
 export const PRESALE_DATE = 'Apr 8, 2022';

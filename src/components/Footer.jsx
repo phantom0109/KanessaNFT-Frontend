@@ -59,27 +59,27 @@ const Footer = () => {
             </FooterMarkPanel>
             <FooterLinksPanel>
             <FooterLinks>
-                <FooterLink href="https://www.kanessa.io/homepage">HOME</FooterLink>
-                <FooterLink href="https://opensea.io/KanessaBrand">
+                <FooterLink href="https://www.kanessa.io/homepage" target="_blank">HOME</FooterLink>
+                <FooterLink href="https://opensea.io/KanessaBrand" target="_blank">
                 OPENSEA
                 </FooterLink>
-                <FooterLink href="https://www.kanessa.io/homepage/about">
+                <FooterLink href="https://www.kanessa.io/homepage/about" target="_blank">
                 ABOUT US
                 </FooterLink>
-                <FooterLink href="http://www.kanessa.net/">WEBSHOP</FooterLink>
+                <FooterLink href="http://www.kanessa.net/" target="_blank">WEBSHOP</FooterLink>
             </FooterLinks>
             </FooterLinksPanel>
             <SiteLinks>
-            <SiteLink href="https://www.facebook.com/kanessanft-102224302360656">
+            <SiteLink href="https://www.facebook.com/kanessanft-102224302360656" target="_blank">
                 <FontAwesomeIcon icon={brands("facebook-f")} />
             </SiteLink>
-            <SiteLink href="https://www.instagram.com/kanessa.nft/">
+            <SiteLink href="https://www.instagram.com/kanessa.nft/" target="_blank">
                 <FontAwesomeIcon icon={brands("instagram")} />
             </SiteLink>
-            <SiteLink href="https://opensea.io/KanessaBrand">
+            <SiteLink href="https://opensea.io/KanessaBrand" target="_blank">
                 <FontAwesomeIcon icon={solid("globe")} />
             </SiteLink>
-            <SiteLink href="https://discord.gg/Ruuwe5Bvhh">
+            <SiteLink href="https://discord.gg/Ruuwe5Bvhh" target="_blank">
                 <FontAwesomeIcon icon={brands("discord")} />
             </SiteLink>
             </SiteLinks>

@@ -5,7 +5,9 @@ import { OPENSEA_LINK } from "../config/config";
 const Header = () => {
     return (
         <Wrapper>
-            <Logo src="/assets/images/logo.png"/>
+            <Link href="https://www.kanessa.io" target="_blank">
+                <Logo src="/assets/images/logo.png"/>
+            </Link>
             <Button href={OPENSEA_LINK} target="_blank">View Collection</Button>
             <ConnectButton />
         </Wrapper>
@@ -91,6 +93,8 @@ text-decoration: none;
     }
 }
 `
-
+const Link = styled.a`
+    text-decoration: none;
+`;
 
 export default Header;
