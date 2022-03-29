@@ -108,10 +108,10 @@ const MintPage = () => {
         />
         <LeftForm>
           <FromTitle>Mint your Plus size ladies</FromTitle>
-          <CounterStr>
+          {/* <CounterStr>
             <AnimatedNumberView value={mintedCount.toNumber()} fontFamily={'inherit'} fontSize={'inherit'} fontColor={'inherit'} fontWeight={'inherit'}/>
             {` / ${totalCount.toNumber()}`} NFTs Minted
-          </CounterStr>
+          </CounterStr> */}
           <InputNumber
             count={count}
             addCount={addCount}
