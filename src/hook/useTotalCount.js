@@ -8,7 +8,7 @@ import { contractAddress } from "../config/config";
 const useTotalCount = () => {
     const {value, error} = useCall({
         contract: new Contract(contractAddress, contractAbi.abi),
-        method: "totalCount",
+        method: "totalSupply",
         args: []
     }) || {value: [BigNumber.from(0)]};
 
