@@ -18,7 +18,7 @@ const ViewInfoPanel = () => {
                 <Span>whitelisted</Span>
             </CounterView>            
             {/* <CountDownTimer /> */}
-            <Span className="alert">Mint date to be announced</Span>
+            <Span className="alert">Starting Soon</Span>
             <img src="/assets/images/xmark.png" onClick={() => setVisible(false)}/>
         </Wrapper>
     );
