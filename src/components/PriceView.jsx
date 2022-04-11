@@ -30,7 +30,8 @@ const RightText = styled.div`
 const PriceView = (props) => {
   return (
     <ViewPanel>
-      {props.price && ethers.utils.formatEther(props.price).toString()} ETH
+      {/* {props.price && ethers.utils.formatEther(props.price).toString()} ETH */}
+      {'?'} ETH
       <RightText>{props.rightText}</RightText>
     </ViewPanel>
   );

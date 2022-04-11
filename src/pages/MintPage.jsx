@@ -98,7 +98,7 @@ const MintPage = () => {
 
   return (
     <MintContainer>
-      <ViewInfoPanel />
+      {/* <ViewInfoPanel /> */}
       <MintPanel>
         <Ribbon
           src="/assets/images/LTDots.png"
