@@ -107,7 +107,7 @@ const MintPage = () => {
           minihidden
         />
         <LeftForm>
-          <FromTitle>Mint your Plus size ladies</FromTitle>
+          <FromTitle>Mint Your Figura Amare NFT</FromTitle>
           {/* <CounterStr>
             <AnimatedNumberView value={mintedCount.toNumber()} fontFamily={'inherit'} fontSize={'inherit'} fontColor={'inherit'} fontWeight={'inherit'}/>
             {` / ${totalCount.toNumber()}`} NFTs Minted
