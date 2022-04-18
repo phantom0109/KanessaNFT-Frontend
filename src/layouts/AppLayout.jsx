@@ -8,7 +8,7 @@ const AppLayout = ({children}) => {
     return (
         <Wrapper>
             <Header />
-            <ComingSoon src="/assets/images/coming_soon.webp" />
+            {/* <ComingSoon src="/assets/images/coming_soon.webp" /> */}
             {children}
             <Footer />
             <SnackBar />
