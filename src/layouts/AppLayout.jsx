@@ -8,6 +8,7 @@ const AppLayout = ({children}) => {
     return (
         <Wrapper>
             <Header />
+            <ComingSoon src="/assets/images/coming_soon.webp" />
             {children}
             <Footer />
             <SnackBar />
@@ -19,5 +20,9 @@ const AppLayout = ({children}) => {
 const Wrapper = styled.div`
   background: #dfb77a;
   width: 100%;
+`
+const ComingSoon = styled.img`
+  width: 100%;
+  height: 100vh;
 `
 export default AppLayout

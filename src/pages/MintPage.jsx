@@ -316,4 +316,6 @@ const Ribbon = styled.img`
   }
 `;
 
+
+
 export default MintPage;
