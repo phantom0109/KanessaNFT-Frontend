@@ -64,6 +64,8 @@ const MintPage = () => {
   };
 
   const mintNow = async () => {
+    toast.warning("Oops not yet, but soon!");
+    return;
     try {
       if (!active || !account) {
         toast.warning("Please connect your wallet!");
@@ -107,7 +109,7 @@ const MintPage = () => {
           minihidden
         />
         <LeftForm>
-          <FromTitle>Mint Your Figura Amare NFT</FromTitle>
+          <FromTitle>Figura Amare 1000 Luscious Curves</FromTitle>
           {/* <CounterStr>
             <AnimatedNumberView value={mintedCount.toNumber()} fontFamily={'inherit'} fontSize={'inherit'} fontColor={'inherit'} fontWeight={'inherit'}/>
             {` / ${totalCount.toNumber()}`} NFTs Minted
